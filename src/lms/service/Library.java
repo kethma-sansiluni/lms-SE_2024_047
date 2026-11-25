@@ -1,10 +1,8 @@
 package lms.service;
 
-import lms.model.Book;
-import lms.model.DVD;
-import lms.model.LibraryItem;
-import lms.model.Member;
+import lms.model.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Library {
@@ -15,32 +13,8 @@ public class Library {
         items.add(item);
     }
 
-    public void addItem(Book book) {
-        System.out.println("Added via addItem(Book): " + book.getTitle());
-        items.add(book);
-    }
-
-    public void addItem(DVD dvd) {
-        System.out.println("Added via addItem(DVD): " + dvd.getTitle());
-        items.add(dvd);
-    }
-
     public void addMember(Member member) {
         members.add(member);
-    }
-
-    public void listItems() {
-        System.out.println("--- Items in the library ---");
-        for (LibraryItem item : items) {
-            System.out.println(item.toString());
-        }
-    }
-
-    public void listMembers() {
-        System.out.println("--- Registered members ---");
-        for (Member member : members) {
-            System.out.println(member.toString());
-        }
     }
 
     public void printAllLateFees(int daysLate) {
@@ -50,12 +24,24 @@ public class Library {
         }
     }
 
-    public void streamIfPossible(LibraryItem item) {
-        if (item instanceof DVD dvd) {
-            System.out.println("Streaming \"" + dvd.getTitle() + "\" (" + dvd.getDurationMinutes() + " min)...");
+    public void lend(Loanable thing, Member member) {
+        thing.loan(member);
+    }
+
+    public void reserveIfPossible(LibraryItem item, Member member) {
+        if (item instanceof Reservable r) {
+            r.reserve(member);
         } else {
-            System.out.println(item.getTitle() + " cannot be streamed - it isn't a DVD.");
+            System.out.println(item.getTitle() + " cannot be reserved.");
+        }
+    }
+
+    public void printMembersByActivity() {
+        System.out.println("--- Members ranked by activity ---");
+        List<Member> sortedMembers = new ArrayList<>(members);
+        Collections.sort(sortedMembers);
+        for (Member m : sortedMembers) {
+            System.out.println(m.getName() + " (" + m.getBorrowedCount() + " borrowed)");
         }
     }
 }
-

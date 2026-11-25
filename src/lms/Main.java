@@ -8,19 +8,31 @@ public class Main {
         Library library = new Library();
 
         Book b1 = new Book("B001", "Clean Code", "Robert C. Martin");
-        Book b2 = new Book("B002", "Effective Java", "Joshua Bloch");
         DVD d1 = new DVD("D001", "Introduction to Algorithms", 120);
+        Magazine m1 = new Magazine("M001", "Software Weekly", 42);
 
         library.addItem(b1);
-        library.addItem(b2);
         library.addItem(d1);
+        library.addItem(m1);
 
-        library.addMember(new Student("M001", "Nadeesha Perera"));
-        library.addMember(new Staff("M002", "Mr. Kasun Silva"));
+        Student s1 = new Student("S001", "Nadeesha Perera");
+        Staff st1 = new Staff("ST001", "Mr. Kasun Silva");
+
+        library.addMember(s1);
+        library.addMember(st1);
 
         library.printAllLateFees(3);
 
-        library.streamIfPossible(d1);
-        library.streamIfPossible(b1);
+        System.out.println("--- Loans ---");
+        library.lend(b1, s1);
+        library.lend(b1, st1); // refused because already loaned
+        library.lend(d1, st1);
+        library.lend(m1, st1);
+
+        System.out.println("--- Reservations ---");
+        library.reserveIfPossible(b1, st1);
+        library.reserveIfPossible(d1, st1);
+
+        library.printMembersByActivity();
     }
 }
